@@ -13,6 +13,7 @@ class Activity extends Model
     protected $fillable = [
         'name', 
         'description',
+        'image',
         'location',
         'price',
         'available_slots',

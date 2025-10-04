@@ -17,6 +17,7 @@ class ActivityResource extends JsonResource
         return [
             'name'            => $this->name,
             'description'     => $this->description,
+            'image_url'       =>$this->image ? asset('storage/' . $this->image) : null,
             'location'        => $this->location,
             'price'           => $this->price,
             'available_slots' => $this->available_slots,
