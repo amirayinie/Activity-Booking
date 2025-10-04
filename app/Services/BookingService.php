@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\BookingCreated;
 use App\Exceptions\NotEnoughSlotsException;
 use App\Models\Activity;
 use App\Models\Booking;
@@ -26,7 +27,8 @@ class BookingService
                 'slots_booked' => $request['slots_number'],
                 'status' => 'pending'
             ]);
-            // TODO : email event 
+            event(new BookingCreated($booking));
+
             return $booking;
         });
     }
