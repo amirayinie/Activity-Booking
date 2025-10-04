@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\V1\ActivityController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,6 +12,7 @@ Route::prefix('v1')->group(function () {
     Route::post('user/register', [AuthController::class, 'register']);
 
     Route::apiResource('activities',ActivityController::class);
+    Route::post('booking',BookingController::class);
     
     Route::middleware('auth:api')->group(function () {
 

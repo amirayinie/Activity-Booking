@@ -10,7 +10,7 @@ class Booking extends Model
     /** @use HasFactory<\Database\Factories\BookingFactory> */
     use HasFactory;
 
-    protected $casts = [
+    protected $fillable = [
         'activity_id',
         'user_id',
         'slots_booked',
