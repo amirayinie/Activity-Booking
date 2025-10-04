@@ -22,7 +22,7 @@ class ActivityUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'            => 'sometimes|string|max:255',
+            'name'            => 'sometimes|string|max:255|unique:activities',
             'description'     => 'sometimes|string|max:511',
             'image'           => 'file|mimes:png,jpg|',
             'location'        => 'sometimes|string|max:255',
