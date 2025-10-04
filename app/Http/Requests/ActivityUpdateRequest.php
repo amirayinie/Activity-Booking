@@ -24,6 +24,7 @@ class ActivityUpdateRequest extends FormRequest
         return [
             'name'            => 'sometimes|string|max:255',
             'description'     => 'sometimes|string|max:511',
+            'image'           => 'file|mimes:png,jpg|',
             'location'        => 'sometimes|string|max:255',
             'price'           => 'sometimes|numeric|between:50,500',
             'available_slots' => 'sometimes|integer',

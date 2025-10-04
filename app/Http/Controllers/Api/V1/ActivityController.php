@@ -7,8 +7,10 @@ use App\Http\Requests\ActivityUpdateRequest;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
+use function App\Utilities\deleteImage;
+use function App\Utilities\imageSaver;
 use function App\Utilities\json;
 
 class ActivityController extends Controller
@@ -28,6 +30,11 @@ class ActivityController extends Controller
     public function store(StoreActivityRequest $request)
     {
         $validated = $request->validated();
+
+        if($request->hasFile('image')){
+            $file = $request->file('image');
+            $validated['image'] = imageSaver($file, $request->name);
+        }
 
         $activity = Activity::create($validated);
 
@@ -50,6 +57,14 @@ class ActivityController extends Controller
     {
         $validated = $request->validated();
 
+        if($request->hasFile('image')){
+             if ($activity->image && Storage::disk('public')->exists($activity->image)) {
+                deleteImage($activity->image);
+        }
+            $file = $request->file('image');
+            $validated['image'] = imageSaver($file, $request->name);
+        }
+
         $activity->update($validated);
 
         return json($activity,'activity updated',200);
@@ -61,6 +76,10 @@ class ActivityController extends Controller
      */
     public function destroy(Activity $activity)
     {
+            if ($activity->image && Storage::disk('public')->exists($activity->image)) {
+            deleteImage($activity->image);
+        }
+
         $activity->delete();
 
         return json([],'deleted successfully',200);

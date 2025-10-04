@@ -22,12 +22,13 @@ class StoreActivityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:511',
-            'location' => 'required|string|max:255',
-            'price' => 'required|numeric|between:50,500',
-            'available_slots' => 'required|integer',
-            'start_date' => 'required|date'
+            'name'              => 'required|string|max:255',
+            'description'       => 'required|string|max:511',
+            'image'             => 'file|mimes:png,jpg|',
+            'location'          => 'required|string|max:255',
+            'price'             => 'required|numeric|between:50,500',
+            'available_slots'   => 'required|integer',
+            'start_date'        => 'required|date'
         ];
     }
 }
