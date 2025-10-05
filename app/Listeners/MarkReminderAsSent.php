@@ -6,6 +6,7 @@ use App\Models\Booking;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Log;
 
 class MarkReminderAsSent
 {
@@ -22,8 +23,11 @@ class MarkReminderAsSent
      */
     public function handle(MessageSent $event): void
     {
+         Log::info('MessageSent listener triggered!', [
+        'headers' => $event->message->getHeaders()->toString(),
+    ]);
         $headers = $event->message->getHeaders();
-        $bookingIdHeader = $headers->get('X-Booking-Reminder');
+        $bookingIdHeader = $headers->get('X-booking-reminder');
 
         if ($bookingIdHeader) {
             $bookingId = (int) $bookingIdHeader->getBody();

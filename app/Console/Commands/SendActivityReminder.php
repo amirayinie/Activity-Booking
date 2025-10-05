@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 
 class SendActivityReminder extends Command
 {
-    protected $signature = 'app:send-activity-reminder';
+    protected $signature = 'send:activity-reminder';
     protected $description = 'Command description';
 
     public function __construct(private ReminderService $reminderService)

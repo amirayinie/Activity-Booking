@@ -19,7 +19,7 @@ class BookingReminderMail extends Mailable implements ShouldQueue
      */
     public function __construct(public Booking $booking)
     {
-        //
+               $this->withSymfonyMessage([$this, 'addBookingHeader']);
     }
 
     /**
@@ -52,4 +52,13 @@ class BookingReminderMail extends Mailable implements ShouldQueue
     {
         return [];
     }
+
+            public function addBookingHeader($message): void
+    {
+        $message->getHeaders()->addTextHeader(
+            'X-booking-reminder',
+            (string) $this->booking->id
+        );
+    }
+
 }
