@@ -14,7 +14,7 @@ class NotEnoughSlotsException extends Exception
     /**
      * Render the exception as an HTTP response.
      */
-    public function render(Request $request): JsonResponse
+    public function render(): JsonResponse
     {
         return json(['error' => 'Sorry, there are not enough available slots for this activity'], 'fail', 422);
     }

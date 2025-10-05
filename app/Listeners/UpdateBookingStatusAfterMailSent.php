@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Events\MessageSent;
 use Illuminate\Queue\InteractsWithQueue;
 
-class UpdateBookingStatusAfterMailSent
+class UpdateBookingStatusAfterMailSent implements ShouldQueue
 {
     /**
      * Create the event listener.

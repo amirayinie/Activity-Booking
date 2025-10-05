@@ -2,13 +2,13 @@
 
 namespace App\Listeners;
 
-use App\Events\BookingCreated;
-use App\Mail\AdminBookingNotificationMail;
+use App\Events\BookingCancelled;
+use App\Mail\BookingCancellingMail;
 use App\Services\MailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotifyAdminOfBooking implements ShouldQueue
+class SentBookingCancellingEmail implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -21,10 +21,9 @@ class NotifyAdminOfBooking implements ShouldQueue
     /**
      * Handle the event.
      */
-    public function handle(BookingCreated $event): void
+    public function handle(BookingCancelled $event): void
     {
         $booking = $event->booking;
-        $adminEmail = config('mail.admin_address', 'admin@tourism-app.test');
-        $this->mailService->send(new AdminBookingNotificationMail($booking) , $adminEmail);
+        $this->mailService->send(new BookingCancellingMail($booking),$booking->user->email);
     }
 }
