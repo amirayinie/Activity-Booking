@@ -20,7 +20,7 @@ class ActivityController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(ActivityFilterRequest $request , ActivityService $activityService)
+    public function index(ActivityFilterRequest $request, ActivityService $activityService)
     {
         $validated = $request->validated();
         $activities = $activityService->search($validated);
@@ -35,14 +35,14 @@ class ActivityController extends Controller
     {
         $validated = $request->validated();
 
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $validated['image'] = imageSaver($file, $request->name);
         }
 
         $activity = Activity::create($validated);
 
-        return json($activity,'activity created',201);
+        return json($activity, 'activity created', 201);
     }
 
     /**
@@ -61,18 +61,17 @@ class ActivityController extends Controller
     {
         $validated = $request->validated();
 
-        if($request->hasFile('image')){
-             if ($activity->image && Storage::disk('public')->exists($activity->image)) {
+        if ($request->hasFile('image')) {
+            if ($activity->image && Storage::disk('public')->exists($activity->image)) {
                 deleteImage($activity->image);
-        }
+            }
             $file = $request->file('image');
             $validated['image'] = imageSaver($file, $request->name);
         }
 
         $activity->update($validated);
 
-        return json($activity,'activity updated',200);
-
+        return json($activity, 'activity updated', 200);
     }
 
     /**
@@ -80,12 +79,12 @@ class ActivityController extends Controller
      */
     public function destroy(Activity $activity)
     {
-            if ($activity->image && Storage::disk('public')->exists($activity->image)) {
+        if ($activity->image && Storage::disk('public')->exists($activity->image)) {
             deleteImage($activity->image);
         }
 
         $activity->delete();
 
-        return json([],'deleted successfully',200);
+        return json([], 'deleted successfully', 200);
     }
 }

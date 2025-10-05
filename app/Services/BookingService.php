@@ -15,10 +15,10 @@ use Illuminate\Validation\ValidationException;
 class BookingService
 {
 
-    public function cancelBooking(Activity $activity, int $userId ,?string $reason)
+    public function cancelBooking(Activity $activity, int $userId, ?string $reason)
     {
-        $booking = Booking::where('activity_id' , $activity->id)
-            ->where('user_id',$userId)
+        $booking = Booking::where('activity_id', $activity->id)
+            ->where('user_id', $userId)
             ->first();
 
         if (!in_array($booking->status, ['confirmed'])) {
@@ -32,14 +32,14 @@ class BookingService
                 'status' => 'you can not cancel booking after the activity is started'
             ]);
         }
-        
-            $booking->update([
-                'stauts' => 'cancelled',
-                'cancel_reason' => $reason,
-                'cancelled_at' => now()
-            ]);
-        
-        $booking->Activity->increment('available_slots',$booking->slots_booked);
+
+        $booking->update([
+            'stauts' => 'cancelled',
+            'cancel_reason' => $reason,
+            'cancelled_at' => now()
+        ]);
+
+        $booking->Activity->increment('available_slots', $booking->slots_booked);
         // event
 
         return $booking;
@@ -66,11 +66,11 @@ class BookingService
         });
     }
 
-    public function activityValidation($activityName) : Activity
+    public function activityValidation($activityName): Activity
     {
-            if(!$activity = Activity::where('name', $activityName)->first()){
-                throw new InvalidActivityException();
-            };
-            return $activity;
+        if (!$activity = Activity::where('name', $activityName)->first()) {
+            throw new InvalidActivityException();
+        };
+        return $activity;
     }
 }

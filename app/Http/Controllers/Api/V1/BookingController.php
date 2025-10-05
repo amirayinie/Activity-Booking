@@ -42,9 +42,9 @@ class BookingController extends Controller
 
         $activity = $this->bookingService->activityValidation($validated['activity_name']);
 
-       $cancelledBooking = $this->bookingService->cancelBooking($activity , $userId , $validated['reason']);
+        $cancelledBooking = $this->bookingService->cancelBooking($activity, $userId, $validated['reason']);
 
-               return json(
+        return json(
             [
                 'status' => $cancelledBooking->status,
             ],

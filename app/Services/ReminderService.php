@@ -6,11 +6,12 @@ use App\Mail\BookingReminderMail;
 use App\Models\Booking;
 use Illuminate\Support\Facades\DB;
 
-class ReminderService {
-    public function __construct(private MailService $mailService){}
+class ReminderService
+{
+    public function __construct(private MailService $mailService) {}
 
 
-   public function sendUpcomingReminders(): int
+    public function sendUpcomingReminders(): int
     {
         $now = now();
         $from = $now->copy()->addDay()->startOfMinute();
@@ -45,5 +46,4 @@ class ReminderService {
 
         return $count;
     }
-
 }
