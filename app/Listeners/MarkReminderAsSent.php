@@ -5,10 +5,9 @@ namespace App\Listeners;
 use App\Models\Booking;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Events\MessageSent;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 
-class MarkReminderAsSent
+class MarkReminderAsSent implements ShouldQueue
 {
     /**
      * Create the event listener.

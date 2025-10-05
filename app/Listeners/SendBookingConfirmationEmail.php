@@ -8,7 +8,7 @@ use App\Services\MailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SendBookingConfirmationEmail
+class SendBookingConfirmationEmail implements ShouldQueue
 {
     /**
      * Create the event listener.

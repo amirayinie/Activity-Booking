@@ -12,8 +12,8 @@ Route::prefix('v1')->group(function () {
     Route::post('user/register', [AuthController::class, 'register']);
 
     Route::apiResource('activities',ActivityController::class);
-    Route::post('booking',BookingController::class);
-    
+    Route::post('booking',[BookingController::class , 'createBooking']);
+    Route::post('booking/cancel',[BookingController::class , 'cancelBooking']);
     Route::middleware('auth:api')->group(function () {
 
         Route::post('user/logout', [AuthController::class, 'logout']);

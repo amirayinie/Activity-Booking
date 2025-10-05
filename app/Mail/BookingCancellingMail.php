@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class AdminBookingNotificationMail extends Mailable implements ShouldQueue
+class BookingCancellingMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -28,7 +28,7 @@ class AdminBookingNotificationMail extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New Booking Received',
+            subject: 'Booking Cancelled',
         );
     }
 
@@ -38,8 +38,8 @@ class AdminBookingNotificationMail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.booking.admin-notification',
-            with: ['booking' => $this->booking]
+            markdown: 'mail.booking-cancelling-mail',
+            with:['booking' => $this->booking]
         );
     }
 
