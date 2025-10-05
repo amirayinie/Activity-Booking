@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ActivityFilterRequest;
 use App\Http\Requests\ActivityUpdateRequest;
 use App\Http\Requests\StoreActivityRequest;
 use App\Http\Resources\ActivityResource;
 use App\Models\Activity;
+use App\Services\ActivityService;
 use Illuminate\Support\Facades\Storage;
 
 use function App\Utilities\deleteImage;
@@ -18,10 +20,12 @@ class ActivityController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {   
-        $activities = Activity::all();
-        return json([ ActivityResource::collection($activities)]);
+    public function index(ActivityFilterRequest $request , ActivityService $activityService)
+    {
+        $validated = $request->validated();
+        $activities = $activityService->search($validated);
+
+        return json(ActivityResource::collection($activities));
     }
 
     /**
