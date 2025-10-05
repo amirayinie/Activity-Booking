@@ -1,61 +1,194 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🏝️ Tourism Activity Booking System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A **Laravel 12**-based RESTful API for managing tourism activities and bookings.  
+Users can browse, book, and cancel tourism activities, while the system handles email notifications, reminders, and booking confirmations using Laravel’s **Queues**, **Events**, and **Mailables**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🎫 Activity Management
+- Create, read, update, and delete tourism activities.
+- Upload and manage activity images.
+- Filter and search activities by **name**, **location**, **price**, or **availability**.
+- Automatic validation via **Form Requests**.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 📅 Booking Management
+- Book activities with available slots.
+- Reduce available slots automatically after booking.
+- Cancel bookings with custom reason.
+- Automatically restore slots when a booking is cancelled.
+- Prevent cancellation after the activity has started.
 
-## Learning Laravel
+### 📧 Notifications & Emails
+- Send **confirmation emails** to users on successful booking.
+- Notify **admin** when a new booking is created.
+- Send **reminder emails** to users 24 hours before activity start.
+- All emails use **Laravel Queues** for asynchronous delivery.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### ⚙️ Event & Listener System
+- Event: `BookingCreated`, `BookingCancelled`
+- Listeners: 
+  - `SendBookingConfirmationMail`
+  - `NotifyAdminOfBooking`
+  - `SendBookingCancellationMail`
+- All listeners implement `ShouldQueue` for optimized performance.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### 🔍 Search & Filtering
+- `GET /api/v1/activities?name=tehran&max_price=300&available=1`
+- Scope-based filtering inside the `Activity` model (`scopeFilter`).
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 🔒 Authentication
+- JWT-based authentication for users.
+- Protected routes using Laravel middleware.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 🧠 Technologies Used
 
-### Premium Partners
+| Category | Stack |
+|-----------|--------|
+| **Framework** | Laravel 12 |
+| **Database** | MySQL |
+| **Authentication** | JWT (Laravel Sanctum / tymon/jwt-auth) |
+| **Queues** | Laravel Queue (Database / Redis) |
+| **Scheduler** | Laravel Task Scheduling |
+| **Mail Driver** | Mailtrap (sandbox environment) |
+| **Testing** | PHPUnit / Postman |
+| **API Format** | JSON (Custom json() helper) |
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## ⚙️ Installation & Setup
 
-## Contributing
+### 1️⃣ Clone the repository
+git clone https://github.com/yourusername/tourism-activity-booking.git
+cd tourism-activity-booking
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 2️⃣ Install dependencies
 
-## Code of Conduct
+composer install
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3️⃣ Set up environment
 
-## Security Vulnerabilities
+cp .env.example .env
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+Then update your `.env` file:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+DB_DATABASE=booking_db
+DB_USERNAME=root
+DB_PASSWORD=
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_mailtrap_user
+MAIL_PASSWORD=your_mailtrap_pass
+
+QUEUE_CONNECTION=database
+
+### 4️⃣ Run migrations
+
+php artisan migrate
+
+
+### 5️⃣ Run queue worker (for async emails)
+
+php artisan queue:work
+
+
+### 6️⃣ Run scheduler (for daily reminders)
+
+php artisan schedule:work
+
+
+
+
+## 🧩 API Endpoints
+
+### 🔐 Auth
+
+| Method | Endpoint                | Description             |
+| ------ | ----------------------- | ----------------------- |
+| POST   | `/api/v1/user/register` | Register a new user     |
+| POST   | `/api/v1/user/login`    | Authenticate user (JWT) |
+
+### 🏝️ Activities
+
+| Method | Endpoint                  | Description            |
+| ------ | ------------------------- | ---------------------- |
+| GET    | `/api/v1/activities`      | List all activities    |
+| POST   | `/api/v1/activities`      | Create new activity    |
+| GET    | `/api/v1/activities/{id}` | Show specific activity |
+| PUT    | `/api/v1/activities/{id}` | Update activity        |
+| DELETE | `/api/v1/activities/{id}` | Delete activity        |
+
+### 📆 Bookings
+
+| Method | Endpoint                  | Description                     |
+| ------ | ------------------------- | ------------------------------- |
+| POST   | `/api/v1/bookings`        | Create booking                  |
+| POST   | `/api/v1/bookings/cancel` | Cancel booking by activity name |
+
+---
+
+## 🧠 Logic Highlights
+
+* **Custom Exception Handling:**
+  Each exception (e.g. `InvalidActivityException`) implements `render()` to return consistent JSON output.
+
+* **Custom `json()` helper:**
+  All API responses follow a unified structure:
+
+  {
+    "status": "success",
+    "data": { ... }
+  }
+
+* **Transactional Booking Logic:**
+  Booking creation and use `DB::transaction()` to maintain data consistency.
+
+* **Queued Mails & Listeners:**
+  Every mail and event listener implements `ShouldQueue` for optimal async performance.
+
+
+## 🧪 Testing
+
+You can test endpoints via **Postman** or **Laravel HTTP tests**.
+
+php artisan test
+
+
+Example:
+
+POST /api/v1/bookings
+{
+  "activity_id": 1,
+  "slots_number": 2
+}
+
+
+## 🧭 Future Improvements
+
+* [ ] Payment gateway integration (Zarinpal / Stripe sandbox)
+* [ ] Multi-language email templates
+* [ ] Admin dashboard (Vue.js or React)
+* [ ] Role-based authorization (Admin / User)
+* [ ] Activity ratings and reviews
+
+---
+
+## 🧑‍💻 Author
+
+**[Amirhosein Ayinie]**
+Laravel Developer & Backend Engineer
+📧 [ayinie2003@gmail.com]
+🔗 [LinkedIn](https://linkedin.com/in/amirhosein-ayinie-9367a9378) | [GitHub](https://github.com/amirayinie)
+
+
+## ❤️ Credits
+
+* Framework: [Laravel](https://laravel.com)
+* Mail Testing: [Mailtrap](https://mailtrap.io)
+* Queue System: Laravel Horizon / Database Queue
+* Developed with 💻 & ☕ by You
